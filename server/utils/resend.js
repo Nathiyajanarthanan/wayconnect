@@ -18,7 +18,7 @@ async function sendWelcomeEmail(email, name) {
           <h1>Welcome to WayConnectX, ${name}!</h1>
           <p>We're excited to have you on board. WayConnectX is the premier platform for connecting talent with projects.</p>
           <p>Get started by completing your profile and exploring available projects.</p>
-          <a href="http://localhost:3000/profile" style="background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Complete Your Profile</a>
+          <a href="${process.env.CLIENT_URL || 'http://localhost:3000'}/profile" style="background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Complete Your Profile</a>
           <p>Happy networking!</p>
           <p>The WayConnectX Team</p>
         </div>

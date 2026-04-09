@@ -24,14 +24,17 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: process.env.CLIENT_URL || "http://localhost:3000",
     methods: ["GET", "POST"]
   }
 });
 
 // Middleware
 app.use(helmet()); // Set security HTTP headers
-app.use(cors());
+app.use(cors({
+  origin: process.env.CLIENT_URL || "http://localhost:3000",
+  credentials: true
+}));
 app.use(express.json({ limit: '10kb' })); // Body parser, limiting data size
 app.use(mongoSanitize()); // Data sanitization against NoSQL query injection
 
