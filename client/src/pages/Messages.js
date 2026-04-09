@@ -19,7 +19,7 @@ import {
   Pause,
   Volume2
 } from 'lucide-react';
-import axios from 'axios';
+import api from '../services/api';
 import io from 'socket.io-client';
 
 const Messages = () => {
@@ -62,7 +62,7 @@ const Messages = () => {
 
   const fetchConversations = async () => {
     try {
-      const response = await axios.get('/api/chat/conversations');
+      const response = await api.get('/api/chat/conversations');
       // Filter out any malformed conversations
       const validConversations = (response.data || []).filter(conv => 
         conv && conv._id && conv.lastMessage
@@ -80,7 +80,7 @@ const Messages = () => {
       console.log('Current user:', user);
       console.log('Making request to /api/users/following');
       
-      const response = await axios.get('/api/users/following');
+      const response = await api.get('/api/users/following');
       console.log('Following API response:', response);
       console.log('Following data:', response.data);
       console.log('Following count:', response.data?.length || 0);
@@ -97,7 +97,7 @@ const Messages = () => {
   const fetchMessages = async (userId) => {
     try {
       setLoading(true);
-      const response = await axios.get(`/api/chat/messages/${userId}`);
+      const response = await api.get(`/api/chat/messages/${userId}`);
       setMessages(response.data);
     } catch (error) {
       console.error('Error fetching messages:', error);
@@ -117,7 +117,7 @@ const Messages = () => {
       };
 
       console.log('Sending message:', messageData);
-      const response = await axios.post('/api/chat/send', messageData);
+      const response = await api.post('/api/chat/send', messageData);
       console.log('Message sent to server:', response.data);
       
       // Add message to local state immediately
@@ -256,7 +256,7 @@ const Messages = () => {
       formData.append('receiver', selectedConversation._id);
       formData.append('messageType', 'voice');
 
-      const response = await axios.post('/api/chat/send-voice', formData, {
+      const response = await api.post('/api/chat/send-voice', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 

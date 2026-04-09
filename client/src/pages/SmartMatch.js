@@ -11,7 +11,7 @@ import {
   Lightbulb,
   Sparkles
 } from 'lucide-react';
-import axios from 'axios';
+import api from '../services/api';
 
 const SmartMatch = () => {
   const { user } = useAuth();
@@ -24,7 +24,7 @@ const SmartMatch = () => {
   const fetchSmartMatches = async (type = 'skills') => {
     try {
       setLoading(true);
-      const response = await axios.get(`/api/users/smart-match/${type}`);
+      const response = await api.get(`/api/users/smart-match/${type}`);
       setMatches(response.data);
     } catch (error) {
       console.error('Error fetching smart matches:', error);
@@ -35,7 +35,7 @@ const SmartMatch = () => {
 
   const saveUserGoals = async () => {
     try {
-      await axios.put('/api/users/profile', { goals: userGoals });
+      await api.put('/api/users/profile', { goals: userGoals });
       setShowGoalsModal(false);
       fetchSmartMatches('goals');
     } catch (error) {

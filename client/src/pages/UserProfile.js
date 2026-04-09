@@ -19,7 +19,7 @@ import {
   Award,
   Code
 } from 'lucide-react';
-import axios from 'axios';
+import api from '../services/api';
 
 const UserProfile = () => {
   const { userId } = useParams();
@@ -37,7 +37,7 @@ const UserProfile = () => {
   const fetchUserProfile = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`/api/users/${userId}`);
+      const response = await api.get(`/api/users/${userId}`);
       setProfileUser(response.data);
       
       // Check if current user is following this user
@@ -53,7 +53,7 @@ const UserProfile = () => {
 
   const handleFollow = async () => {
     try {
-      const response = await axios.post(`/api/users/follow/${userId}`);
+      const response = await api.post(`/api/users/follow/${userId}`);
       setIsFollowing(response.data.isFollowing);
       
       // Update the follower count in the profile

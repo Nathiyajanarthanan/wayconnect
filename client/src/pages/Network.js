@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Search, UserPlus, MessageCircle, Users, Check, X, Globe, Github, Linkedin, ExternalLink } from 'lucide-react';
-import axios from 'axios';
+import api from '../services/api';
 
 const Network = () => {
   const { user } = useAuth();
@@ -26,7 +26,7 @@ const Network = () => {
   const fetchSuggestions = async () => {
     try {
       console.log('Fetching suggestions...');
-      const response = await axios.get('/api/users/suggestions');
+      const response = await api.get('/api/users/suggestions');
       console.log('Suggestions response:', response.data);
       setSuggestions(response.data);
     } catch (error) {
@@ -39,7 +39,7 @@ const Network = () => {
   const fetchConnections = async () => {
     try {
       console.log('Fetching connections...');
-      const response = await axios.get('/api/users/following');
+      const response = await api.get('/api/users/following');
       console.log('Connections response:', response.data);
       setConnections(response.data);
     } catch (error) {
@@ -53,7 +53,7 @@ const Network = () => {
     try {
       const skills = user?.profile?.skills?.join(',') || '';
       const location = user?.profile?.location || '';
-      const response = await axios.get(`/api/discovery/global-suggestions?skills=${skills}&location=${location}`);
+      const response = await api.get(`/api/discovery/global-suggestions?skills=${skills}&location=${location}`);
       setGlobalSuggestions(response.data.suggestions || []);
     } catch (error) {
       console.error('Error fetching global suggestions:', error);
@@ -68,7 +68,7 @@ const Network = () => {
         return;
       }
       
-      const response = await axios.get('/api/linkedin/auth-url');
+      const response = await api.get('/api/linkedin/auth-url');
       window.open(response.data.authUrl, '_blank', 'width=600,height=600');
     } catch (error) {
       console.error('LinkedIn auth error:', error);
@@ -84,7 +84,7 @@ const Network = () => {
 
     try {
       setLoading(true);
-      const response = await axios.get(`/api/users/search/${query}`);
+      const response = await api.get(`/api/users/search/${query}`);
       setSearchResults(response.data);
     } catch (error) {
       console.error('Search error:', error);
@@ -96,7 +96,7 @@ const Network = () => {
   const handleFollow = async (userId) => {
     try {
       console.log('Attempting to follow user:', userId);
-      const response = await axios.post(`/api/users/follow/${userId}`);
+      const response = await api.post(`/api/users/follow/${userId}`);
       console.log('Follow response:', response.data);
       
       if (response.data.isFollowing) {
@@ -125,7 +125,7 @@ const Network = () => {
         alert('LinkedIn connection feature coming soon!');
       } else {
         // Import user to our platform
-        const response = await axios.post('/api/discovery/import-external-user', {
+        const response = await api.post('/api/discovery/import-external-user', {
           platform: globalUser.source,
           externalId: globalUser.id,
           userData: {

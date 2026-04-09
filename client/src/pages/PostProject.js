@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { DollarSign, Calendar, MapPin, Tag, FileText, Users, Clock, Save, X } from 'lucide-react';
-import axios from 'axios';
+import api from '../services/api';
 
 const PostProject = () => {
   const { user } = useAuth();
@@ -95,7 +95,7 @@ const PostProject = () => {
 
     try {
       setLoading(true);
-      const response = await axios.post('/api/projects', formData);
+      const response = await api.post('/api/projects', formData);
       alert('Project posted successfully!');
       navigate('/projects');
     } catch (error) {

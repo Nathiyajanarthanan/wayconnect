@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { Search, Filter, MapPin, DollarSign, Clock, Users, ExternalLink, Globe, Briefcase } from 'lucide-react';
-import axios from 'axios';
+import api from '../services/api';
 
 const Projects = () => {
   const { user } = useAuth();
@@ -24,7 +24,7 @@ const Projects = () => {
   const fetchProjects = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('/api/projects');
+      const response = await api.get('/api/projects');
       setProjects(response.data);
     } catch (error) {
       console.error('Error fetching projects:', error);
@@ -36,7 +36,7 @@ const Projects = () => {
   const fetchGlobalProjects = async () => {
     try {
       const skills = user?.profile?.skills?.join(',') || '';
-      const response = await axios.get(`/api/discovery/global-projects?skills=${skills}`);
+      const response = await api.get(`/api/discovery/global-projects?skills=${skills}`);
       setGlobalProjects(response.data.projects || []);
     } catch (error) {
       console.error('Error fetching global projects:', error);
@@ -54,7 +54,7 @@ const Projects = () => {
       const budget = prompt('Enter your proposed budget:');
       
       if (proposal && budget) {
-        await axios.post(`/api/projects/${projectId}/apply`, {
+        await api.post(`/api/projects/${projectId}/apply`, {
           proposal,
           proposedBudget: parseFloat(budget)
         });

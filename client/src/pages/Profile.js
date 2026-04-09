@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useMemo } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { Camera, Edit3, MapPin, Link as LinkIcon, Mail, Phone, Plus, X, Save, Globe } from 'lucide-react';
-import axios from 'axios';
+import api from '../services/api';
 
 const Profile = () => {
   const { user, setUser } = useAuth();
@@ -72,10 +72,9 @@ const Profile = () => {
       setLoading(true);
       console.log('Uploading file:', file.name, 'Size:', file.size, 'Type:', type);
       
-      const response = await axios.post(`/api/users/upload/${type}`, formData, {
+      const response = await api.post(`/api/users/upload/${type}`, formData, {
         headers: { 
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Content-Type': 'multipart/form-data'
         }
       });
       
@@ -98,7 +97,7 @@ const Profile = () => {
       setLoading(true);
       console.log('Updating profile with:', updateData);
       
-      const response = await axios.put('/api/users/profile', updateData);
+      const response = await api.put('/api/users/profile', updateData);
       console.log('Profile update response:', response.data);
       
       setUser(response.data);

@@ -18,7 +18,7 @@ import {
   Lightbulb,
   Zap
 } from 'lucide-react';
-import axios from 'axios';
+import api from '../services/api';
 
 const CareerPath = () => {
   const { user } = useAuth();
@@ -45,7 +45,7 @@ const CareerPath = () => {
 
   const fetchCareerData = async () => {
     try {
-      const response = await axios.get('/api/career/path');
+      const response = await api.get('/api/career/path');
       setCareerMilestones(response.data.milestones);
       setFutureGoals(response.data.goals);
       setCareerInsights(response.data.insights);
@@ -131,7 +131,7 @@ const CareerPath = () => {
 
   const addMilestone = async () => {
     try {
-      const response = await axios.post('/api/career/milestone', newMilestone);
+      const response = await api.post('/api/career/milestone', newMilestone);
       setCareerMilestones([...careerMilestones, response.data]);
       setNewMilestone({
         title: '',
@@ -165,7 +165,7 @@ const CareerPath = () => {
 
   const addGoal = async () => {
     try {
-      const response = await axios.post('/api/career/goal', newGoal);
+      const response = await api.post('/api/career/goal', newGoal);
       setFutureGoals([...futureGoals, response.data]);
       setNewGoal({
         title: '',

@@ -16,7 +16,7 @@ import {
   ThumbsUp,
   Eye
 } from 'lucide-react';
-import axios from 'axios';
+import api from '../services/api';
 
 const SkillVerification = () => {
   const { user } = useAuth();
@@ -31,7 +31,7 @@ const SkillVerification = () => {
 
   const fetchUserSkills = async () => {
     try {
-      const response = await axios.get('/api/skills/my-skills');
+      const response = await api.get('/api/skills/my-skills');
       setSkills(response.data);
     } catch (error) {
       console.error('Error fetching skills:', error);
@@ -64,7 +64,7 @@ const SkillVerification = () => {
 
   const fetchPendingEndorsements = async () => {
     try {
-      const response = await axios.get('/api/skills/pending-endorsements');
+      const response = await api.get('/api/skills/pending-endorsements');
       setPendingEndorsements(response.data);
     } catch (error) {
       console.error('Error fetching endorsements:', error);
@@ -84,7 +84,7 @@ const SkillVerification = () => {
     if (!newSkill.trim()) return;
     
     try {
-      const response = await axios.post('/api/skills/add', { 
+      const response = await api.post('/api/skills/add', { 
         skill: newSkill,
         level: 'Beginner'
       });
@@ -109,7 +109,7 @@ const SkillVerification = () => {
 
   const endorseSkill = async (endorsementId, approve) => {
     try {
-      await axios.post(`/api/skills/endorse/${endorsementId}`, { approve });
+      await api.post(`/api/skills/endorse/${endorsementId}`, { approve });
       setPendingEndorsements(prev => prev.filter(e => e.id !== endorsementId));
     } catch (error) {
       console.error('Error endorsing skill:', error);
@@ -119,7 +119,7 @@ const SkillVerification = () => {
 
   const requestVerification = async (skillName) => {
     try {
-      await axios.post('/api/skills/request-verification', { skill: skillName });
+      await api.post('/api/skills/request-verification', { skill: skillName });
       alert('Verification request sent to your connections!');
     } catch (error) {
       console.error('Error requesting verification:', error);
