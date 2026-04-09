@@ -305,7 +305,8 @@ const Messages = () => {
 
     try {
       console.log('Initializing socket connection for user:', user._id);
-      socketRef.current = io('http://localhost:5000');
+      const SOCKET_URL = process.env.REACT_APP_SOCKET_URL || 'http://localhost:5000';
+      socketRef.current = io(SOCKET_URL);
       
       // Join user's personal room
       socketRef.current.emit('join-room', user._id);
