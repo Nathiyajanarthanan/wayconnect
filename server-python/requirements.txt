@@ -9,3 +9,5 @@ requests==2.31.0
 stripe==8.5.0
 google-generativeai==0.4.1
 algoliasearch==3.0.0
+gunicorn==21.2.0
+eventlet==0.33.3

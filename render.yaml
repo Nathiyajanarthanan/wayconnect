@@ -1,0 +1,31 @@
+services:
+  # Python Backend
+  - type: web
+    name: wayconnect-backend
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn --worker-class eventlet -w 1 app:app"
+    rootDir: server-python
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: DATABASE_URL
+        value: sqlite:///instance/wayconnect.db
+      - key: SECRET_KEY
+        fromContext: secret
+      - key: STRIPE_SECRET_KEY
+        fromContext: secret
+
+  # React Frontend (Static Site)
+  - type: static
+    name: wayconnect-frontend
+    env: static
+    buildCommand: "npm install && npm run build"
+    publishDir: client/build
+    rootDir: client
+    envVars:
+      - key: REACT_APP_API_URL
+        fromService:
+          type: web
+          name: wayconnect-backend
+          property: host
