@@ -46,9 +46,18 @@ export const AuthProvider = ({ children }) => {
       
       return { success: true };
     } catch (error) {
+      let errorMsg = 'Login failed';
+      if (error.response?.data?.message) {
+        errorMsg = error.response.data.message;
+      } else if (error.response?.data?.errors?.length > 0) {
+        errorMsg = error.response.data.errors[0].msg;
+      } else if (error.message) {
+        errorMsg = error.message;
+      }
+      
       return { 
         success: false, 
-        error: error.response?.data?.message || 'Login failed' 
+        error: errorMsg
       };
     }
   };
@@ -63,9 +72,18 @@ export const AuthProvider = ({ children }) => {
       
       return { success: true };
     } catch (error) {
+      let errorMsg = 'Registration failed';
+      if (error.response?.data?.message) {
+        errorMsg = error.response.data.message;
+      } else if (error.response?.data?.errors?.length > 0) {
+        errorMsg = error.response.data.errors.map(e => e.msg).join(', ');
+      } else if (error.message) {
+        errorMsg = error.message;
+      }
+
       return { 
         success: false, 
-        error: error.response?.data?.message || 'Registration failed' 
+        error: errorMsg
       };
     }
   };
