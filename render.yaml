@@ -17,11 +17,11 @@ services:
         fromContext: secret
 
   # React Frontend (Static Site)
-  - type: static
+  - type: web
     name: wayconnect-frontend
-    env: static
+    runtime: static
     buildCommand: "npm install && npm run build"
-    publishDir: client/build
+    staticPublishPath: build
     rootDir: client
     envVars:
       - key: REACT_APP_API_URL
