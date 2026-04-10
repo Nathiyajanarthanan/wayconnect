@@ -12,9 +12,9 @@ services:
       - key: DATABASE_URL
         value: sqlite:///instance/wayconnect.db
       - key: SECRET_KEY
-        fromContext: secret
+        generateValue: true
       - key: STRIPE_SECRET_KEY
-        fromContext: secret
+        sync: false
 
   # React Frontend (Static Site)
   - type: web
