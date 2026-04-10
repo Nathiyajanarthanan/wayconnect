@@ -1,20 +1,34 @@
-from flask import Flask, jsonify
+import os
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from extensions import db, socketio
 
 app = Flask(__name__)
-# Enable CORS for frontend
-CORS(app, resources={r"/api/*": {"origins": ["http://localhost:3000", "https://wayconnect.vercel.app"]}}, supports_credentials=True)
 
-# Configuration
-app.config['SECRET_KEY'] = 'your_super_secret_key'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///wayconnect.db'
+# Production Configuration
+SECRET_KEY = os.environ.get('SECRET_KEY', 'your_super_secret_key')
+DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite:///wayconnect.db')
+ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "https://wayconnect.vercel.app",
+    os.environ.get('RENDER_EXTERNAL_URL') # Auto-detected Render URL
+]
+
+app.config['SECRET_KEY'] = SECRET_KEY
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Ensure the instance folder exists for SQLite
+if DATABASE_URL.startswith('sqlite:///instance/'):
+    os.makedirs('instance', exist_ok=True)
 
 db.init_app(app)
 socketio.init_app(app)
 
-# Import models to ensure they are created
+# Enable CORS with dynamic origins
+CORS(app, resources={r"/api/*": {"origins": [o for o in ALLOWED_ORIGINS if o]}}, supports_credentials=True)
+
+# Import models to ensure they are registered with SQLAlchemy
 from models import *
 
 # Register Blueprints
@@ -41,6 +55,10 @@ app.register_blueprint(skills_bp, url_prefix='/api/skills')
 app.register_blueprint(smart_match_bp, url_prefix='/api/smart-match')
 app.register_blueprint(linkedin_bp, url_prefix='/api/linkedin')
 app.register_blueprint(payments_bp, url_prefix='/api/payments')
+
+# Initial Database Creation (Safe for production runs)
+with app.app_context():
+    db.create_all()
 
 # Socket.io events
 from flask_socketio import emit, join_room, leave_room
@@ -71,13 +89,11 @@ def handle_send_message(data):
 @socketio.on('disconnect')
 def handle_disconnect():
     print(f"Client disconnected: {request.sid}")
-    # Remove from connected users...
 
 @app.route('/health')
 def health_check():
     return jsonify({"status": "UP"}), 200
 
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all() # Create sqlite db tables
+    # Used for local development only
     socketio.run(app, debug=True, port=5000, allow_unsafe_werkzeug=True)
