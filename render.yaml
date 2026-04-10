@@ -2,6 +2,7 @@ services:
   # Python Backend
   - type: web
     name: wayconnect-backend
+    plan: free
     env: python
     buildCommand: "pip install -r requirements.txt"
     startCommand: "gunicorn --worker-class eventlet -w 1 app:app"
@@ -19,6 +20,7 @@ services:
   # React Frontend (Static Site)
   - type: web
     name: wayconnect-frontend
+    plan: free
     runtime: static
     buildCommand: "npm install && npm run build"
     staticPublishPath: build
