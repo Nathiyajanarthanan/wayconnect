@@ -21,8 +21,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Ensure the instance folder exists for SQLite
-if DATABASE_URL.startswith('sqlite:///instance/'):
-    os.makedirs('instance', exist_ok=True)
+if DATABASE_URL.startswith('sqlite:///'):
+    os.makedirs(app.instance_path, exist_ok=True)
 
 db.init_app(app)
 socketio.init_app(app)

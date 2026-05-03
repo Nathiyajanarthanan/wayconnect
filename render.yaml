@@ -11,7 +11,7 @@ services:
       - key: FLASK_ENV
         value: production
       - key: DATABASE_URL
-        value: sqlite:///instance/wayconnect.db
+        value: sqlite:///wayconnect.db
       - key: PYTHON_VERSION
         value: 3.11.8
       - key: SECRET_KEY
