@@ -79,6 +79,9 @@ export const AuthProvider = ({ children }) => {
         errorMsg = error.response.data.errors.map(e => e.msg).join(', ');
       } else if (error.message) {
         errorMsg = error.message;
+        if (error.message === "Network Error") {
+          errorMsg = `Network Error! The app tried to connect to: ${api.defaults.baseURL}`;
+        }
       }
 
       return { 
