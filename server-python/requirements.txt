@@ -10,5 +10,6 @@ stripe==8.5.0
 google-generativeai==0.4.1
 algoliasearch==3.0.0
 gunicorn==21.2.0
-eventlet==0.33.3
+gevent==24.2.1
+gevent-websocket==0.10.1
 setuptools==69.0.3
