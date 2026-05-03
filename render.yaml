@@ -30,14 +30,4 @@ services:
       - type: rewrite
         source: /*
         destination: /index.html
-    envVars:
-      - key: REACT_APP_API_URL
-        fromService:
-          type: web
-          name: wayconnect-backend
-          property: host
-      - key: REACT_APP_SOCKET_URL
-        fromService:
-          type: web
-          name: wayconnect-backend
-          property: host
+
