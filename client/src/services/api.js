@@ -1,9 +1,12 @@
 import axios from 'axios';
 
 // Get base URL from environment variable or default to localhost
-let baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-if (baseURL && !baseURL.startsWith('http')) {
-  baseURL = `https://${baseURL}`;
+let baseURL = process.env.REACT_APP_API_URL;
+
+if (process.env.NODE_ENV === 'production') {
+  baseURL = 'https://wayconnect-backend.onrender.com';
+} else {
+  baseURL = baseURL || 'http://localhost:5000';
 }
 
 const api = axios.create({

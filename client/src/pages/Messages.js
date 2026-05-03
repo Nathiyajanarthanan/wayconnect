@@ -305,7 +305,9 @@ const Messages = () => {
 
     try {
       console.log('Initializing socket connection for user:', user._id);
-      const SOCKET_URL = process.env.REACT_APP_SOCKET_URL || 'http://localhost:5000';
+      const SOCKET_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://wayconnect-backend.onrender.com' 
+  : (process.env.REACT_APP_SOCKET_URL || 'http://localhost:5000');
       socketRef.current = io(SOCKET_URL);
       
       // Join user's personal room
