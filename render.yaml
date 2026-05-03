@@ -32,3 +32,8 @@ services:
           type: web
           name: wayconnect-backend
           property: host
+      - key: REACT_APP_SOCKET_URL
+        fromService:
+          type: web
+          name: wayconnect-backend
+          property: host

@@ -1,6 +1,7 @@
 import os
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+import re
 from extensions import db, socketio
 
 app = Flask(__name__)
@@ -11,7 +12,8 @@ DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite:///wayconnect.db')
 ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://wayconnect.vercel.app",
-    os.environ.get('RENDER_EXTERNAL_URL') # Auto-detected Render URL
+    os.environ.get('RENDER_EXTERNAL_URL'), # Auto-detected Render URL
+    re.compile(r"https://.*\.onrender\.com") # Allow any render frontend
 ]
 
 app.config['SECRET_KEY'] = SECRET_KEY
