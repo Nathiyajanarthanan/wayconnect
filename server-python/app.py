@@ -9,12 +9,6 @@ app = Flask(__name__)
 # Production Configuration
 SECRET_KEY = os.environ.get('SECRET_KEY', 'your_super_secret_key')
 DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite:///wayconnect.db')
-ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "https://wayconnect.vercel.app",
-    os.environ.get('RENDER_EXTERNAL_URL'), # Auto-detected Render URL
-    re.compile(r"https://.*\.onrender\.com") # Allow any render frontend
-]
 
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
@@ -27,8 +21,8 @@ if DATABASE_URL.startswith('sqlite:///'):
 db.init_app(app)
 socketio.init_app(app)
 
-# Enable CORS with dynamic origins
-CORS(app, resources={r"/api/*": {"origins": [o for o in ALLOWED_ORIGINS if o]}}, supports_credentials=True)
+# Enable CORS with wildcard since we use JWT Bearer tokens, avoiding all origin mismatch issues
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # Import models to ensure they are registered with SQLAlchemy
 from models import *

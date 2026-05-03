@@ -5,7 +5,7 @@ services:
     plan: free
     env: python
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn --worker-class gthread --threads 50 -w 1 app:app"
+    startCommand: "gunicorn -b 0.0.0.0:$PORT --worker-class gthread --threads 50 -w 1 app:app"
     rootDir: server-python
     envVars:
       - key: FLASK_ENV
